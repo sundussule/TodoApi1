@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using TodoApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TodoContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// OpenAPI / Swagger support
+// OpenAPI support
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -19,13 +20,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(); // Adds Scalar UI at /scalar/v1
 }
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-// Map Controller routes
 app.MapControllers();
 
 app.Run();
